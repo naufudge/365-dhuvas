@@ -67,6 +67,7 @@ const DaysTable = (params: {
       
       <br/>
     <AddPopup show={params.showAddPopup} setShow={params.setAddPopup} />
+
     <DataTable columns={columns} data={filteredData}></DataTable>
     </div>
   )

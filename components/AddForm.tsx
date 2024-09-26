@@ -34,15 +34,14 @@ const formSchema = z.object({
 
 const AddForm = () => {
     const details = "ތަފްސީލު"
+    const date = "ތާރީޚު"
     const source = "ސޯރސް"
     const formFontSize = "text-[16px]"
 
-    // 1. Define your form.
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema)
     })
     
-    // 2. Define a submit handler.
     function onSubmit(values: z.infer<typeof formSchema>) {
         // Do something with the form values.
         console.log(values)
@@ -52,82 +51,82 @@ const AddForm = () => {
         <Form {...form}>
             <form dir="rtl" onSubmit={form.handleSubmit(onSubmit)} className="space-y-7 w-full text-right">
                 <FormField
-                control={form.control}
-                name="details"
-                render={({ field }) => (
-                    <FormItem>
-                    <FormLabel className="text-right text-[16px]">{details}</FormLabel>
-                    <FormControl>
-                        {/* <Input className="text-black text-lg" placeholder={details} {...field} /> */}
-                        <Textarea
-                        placeholder={details}
-                        className="resize-none text-black text-[16px]"
-                        {...field}
-                        />
-                    </FormControl>
-                    {/* <FormDescription>
-                        This is the details.
-                    </FormDescription> */}
-                    <FormMessage />
-                    </FormItem>
-                )}
+                    control={form.control}
+                    name="details"
+                    render={({ field }) => (
+                        <FormItem className="flex flex-col">
+                            <FormLabel className="text-right text-[16px] font-waheed">{details}</FormLabel>
+                            <FormControl>
+                                {/* <Input className="text-black text-lg" placeholder={details} {...field} /> */}
+                                <Textarea
+                                placeholder={details}
+                                className="resize-none text-black text-[16px]"
+                                {...field}
+                                />
+                            </FormControl>
+                            
+                            <FormMessage />
+                        </FormItem>
+                    )}
                 />
-
-                <FormField
-                control={form.control}
-                name="date"
-                render={({ field }) => (
-                    <FormItem>
-                    <FormLabel className="text-right text-[16px]">{source}</FormLabel>
-                    <Popover>
-                    <PopoverTrigger asChild>
-                    <FormControl>
-                        <Button
-                        variant={"outline"}
-                        className={cn(
-                            "w-[240px] pl-3 text-left font-normal",
-                            !field.value && "text-muted-foreground"
+                <div className="grid grid-cols-2 gap-4">
+                    <FormField
+                        control={form.control}
+                        name="source"
+                        render={({ field }) => (
+                            <FormItem>
+                            <FormLabel className="text-right text-[16px] font-waheed">{source}</FormLabel>
+                            <FormControl>
+                                <Input className="text-black text-[16px]" placeholder={source} {...field} />
+                            </FormControl>
+                            <FormMessage />
+                            </FormItem>
                         )}
-                        >
-                        {field.value ? (
-                            format(field.value, "PPP")
-                        ) : (
-                            <span>Pick a date</span>
-                        )}
-                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                        </Button>
-                    </FormControl>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
-                    <Calendar
-                        mode="single"
-                        selected={field.value}
-                        onSelect={field.onChange}
-                        disabled={(date) =>
-                        date > new Date() || date < new Date("1900-01-01")
-                        }
-                        initialFocus
                     />
-                    </PopoverContent>
-                </Popover>
-                    <FormMessage />
-                    </FormItem>
-                )}
-                />
 
                 <FormField
-                control={form.control}
-                name="source"
-                render={({ field }) => (
-                    <FormItem>
-                    <FormLabel className="text-right text-[16px]">{source}</FormLabel>
-                    <FormControl>
-                        <Input className="text-black text-[16px]" placeholder={source} {...field} />
-                    </FormControl>
-                    <FormMessage />
-                    </FormItem>
-                )}
-                />
+                    control={form.control}
+                    name="date"
+                    render={({ field }) => (
+                        <FormItem className="flex flex-col">
+                        <FormLabel className="text-right text-[16px] font-waheed">{date}</FormLabel>
+                        <Popover>
+                            <PopoverTrigger asChild>
+                            <FormControl>
+                                <Button
+                                variant={"outline"}
+                                className={cn(
+                                    "h-full px-4 text-right font-normal justify-between text-[16px]",
+                                    !field.value && "text-muted-foreground"
+                                )}
+                                >
+                                {field.value ? (
+                                    format(field.value, "PPP")
+                                ) : (
+                                    <span className="text-gray-500">{date} ނަންގަވާ</span>
+                                )}
+                                <CalendarIcon color="black" className="h-4 w-4 opacity-50" />
+                                </Button>
+                            </FormControl>
+                            </PopoverTrigger>
+                            <PopoverContent className="w-auto p-0" align="start">
+                            <Calendar
+                                mode="single"
+                                selected={field.value}
+                                onSelect={field.onChange}
+                                disabled={(date) =>
+                                date > new Date() || date < new Date("1900-01-01")
+                                }
+                                initialFocus
+                            />
+                            </PopoverContent>
+                        </Popover>
+                            <FormMessage />
+                            </FormItem>
+                    )}
+                /> 
+                </div>
+                
 
                 <div className="w-full text-center">
                     <Button 
