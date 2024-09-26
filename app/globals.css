@@ -31,3 +31,70 @@ body {
     text-wrap: balance;
   }
 }
+
+h1.title {
+  animation: fadeIn 1s ease-in-out;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.visible-menu {
+  visibility: visible;
+  opacity: 1;
+  animation: drop-down 0.5s ease-in-out;
+}
+
+.hidden-menu {
+  visibility: hidden;
+  opacity: 0;
+  translate: 0px -25px;
+  transition: visibility 0.25s 0.25s, opacity 0.25s linear, translate 0.5s linear;
+}
+
+@keyframes drop-down {
+  0% {
+    opacity: 0;
+    translate: 0px -25px;
+  }
+  100% {
+    translate: 0px 0px;
+  }
+}
+
+
+.blurry-bg {
+  transition: 0.5s ease-out;
+  /* animation: fadeIn 0.5s ease-in-out; */
+  opacity: 1;
+  visibility: hidden;
+}
+
+.blurry-bg.off {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.popup {
+  transition: 0.5s ease-in-out;
+  /* scale: 100%; */
+  opacity: 1;
+  visibility: visible;
+}
+
+.popup.off {
+  /* scale: 0%; */
+  opacity: 0;
+  visibility: hidden;
+}
+
+@keyframes popup {
+  0% { scale: 0%; }
+  100% { scale: 100%; }
+}

@@ -1,112 +1,104 @@
-import Image from "next/image";
+'use client';
+
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { Archivo_Black } from "next/font/google";
+import localFont from 'next/font/local';
+import DaysTable, { Dhuvas_Type } from "@/components/DaysTable";
+
+//// FONTS ////
+const archivo = Archivo_Black({
+  weight: "400",
+  subsets: ["latin"]
+})
+const aammuFK = localFont({
+  src: "../public/assets/fonts/aammufkF.ttf"
+})
+const utheemu = localFont({
+  src: "../public/assets/fonts/mvutheemuREGULAR.ttf",
+})
+const waheed = localFont({
+  src: "../public/assets/fonts/MVAWaheed.ttf",
+})
+
+/////////////////
 
 export default function Home() {
+  const [dhuvas, setDhuvas] = useState<Dhuvas_Type[]>(Array)
+  const [searchHidden, setSearchHidden] = useState(false)
+  const [numCount, setNumCount] = useState(0)
+  const [loadingDots, setLoadingDots] = useState("")
+  const [searchQuery, setSearchQuery] = useState('')
+  const [showAddPopup, setAddPopup] = useState(false)
+
+
+  useEffect(() => {
+    const get_dhuvas = async () => {
+      try {
+        const response = await axios.get("http://10.12.29.68:8000/dhuvas")
+        let result = response.data.result
+        setDhuvas(result)
+        return result
+      } catch (error: any) {
+        console.log(error.message)
+      }
+    }
+    if (dhuvas.length === 0) get_dhuvas();
+  }, [dhuvas])
+
+  useEffect(() => {
+    const num_counter = async () => { setNumCount(numCount + 1); }
+
+    setTimeout(function() {
+      if (numCount < 365) num_counter();
+    }, 0.3);
+  }, [numCount])
+
+  useEffect(() => {
+    const loading = async (num: number) => { setLoadingDots(".".repeat(num)) }
+
+    setTimeout(function() {
+      let x = 1
+      if (x <= 3) {
+        loading(x);
+        x = x + 1
+      } else {
+        x = 1
+        loading(x); 
+      }
+    }, 0.1);
+  }, [loadingDots])
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">app/page.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:size-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+    <main className="flex min-h-screen flex-col items-center md:p-24 p-4">
+      <h1 className={`title ${aammuFK.className} text-[5rem] font-bold mb-10`}>
+        {/* <span className="text-[6rem] text-transparent bg-clip-text bg-gradient-to-r from-purple-700 via-blue-500 to-indigo-600 inline-block">{numCount}</span> Dhuvas */}
+        <span>ދުވަސް </span>
+        <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-700 via-blue-500 to-indigo-600 inline-block">{numCount}</span>
+      </h1>
+      <div dir="rtl" className={`${waheed.className} text-xl`}>
+        <div className="flex flex-col text-center">
+          {/* <label htmlFor="month" className="">މަސް ނަންގަވާ:</label>
+          <select name="month" id="month" className="px-3 py-1 bg-white text-black text-center rounded-lg">
+            <option className="">January</option>
+          </select> */}
+          {/* <DateDropDown monthSelection={setSelectedMonth} daySelection={setSelectedDay} /> */}
         </div>
       </div>
-
-      <div className="relative z-[-1] flex place-items-center before:absolute before:h-[300px] before:w-full before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 sm:before:w-[480px] sm:after:w-[240px] before:lg:h-[360px]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className="mb-32 grid text-center lg:mb-0 lg:w-full lg:max-w-5xl lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Docs{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Learn{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Templates{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Explore starter templates for Next.js.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Deploy{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-balance text-sm opacity-50">
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
+      <div className={`${utheemu.className} text-2xl w-full`}>
+        {dhuvas.length != 0 ? 
+          <DaysTable 
+          dhuvas={dhuvas} 
+          setQuery={setSearchQuery} 
+          query={searchQuery} 
+          setSearchHidden={setSearchHidden}
+          searchHidden={searchHidden}
+          showAddPopup={showAddPopup}
+          setAddPopup={setAddPopup}
+          /> 
+        :
+          <div dir="text-center m-auto">މަޑުކޮށްލައްވާ{loadingDots}</div>
+        }
       </div>
     </main>
   );
